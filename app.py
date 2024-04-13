@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 workbook_alunos = openpyxl.load_workbook('planilha_alunos.xlsx')
 sheet_alunos = workbook_alunos['Sheet1']
 
-for linha in sheet_alunos.iter_rows(min_row=2):
+for indice, linha in enumerate(sheet_alunos.iter_rows(min_row=2)):
     # cada celula que contém a info que precisamos
     nome_curso = linha[0].value # Nome do curso
     nome_participante = linha[1].value # nome do participante
@@ -20,15 +20,29 @@ for linha in sheet_alunos.iter_rows(min_row=2):
     
     # Transferir os dados da planilha para a imagem do certificado
 
-    font_nome = ImageFont.truetype('./tahomabd.ttf')
-    font_geral = ImageFont.truetype('./tahoma.ttf')
+    font_nome = ImageFont.truetype('./tahomabd.ttf',90)
+    font_geral = ImageFont.truetype('./tahoma.ttf',80)
+    font_data = ImageFont.truetype('./tahoma.ttf',55)
 
     imagem = Image.open('./certificado_padrao.jpg')
     desenhar = ImageDraw.Draw(imagem)
 
-    desenhar.text((200,600),nome_participante,fill='black',font=font_nome)
+    desenhar.text((1020,827),nome_participante,fill='black',font=font_nome)
+    desenhar.text((1060,950),nome_curso,fill='black',font=font_geral)
+    desenhar.text((1435,1065),tipo_paticipacao,fill='black',font=font_geral)
+    desenhar.text((1480,1182),nome_curso,fill='black',font=font_geral)
 
-    imagem.save('./test.png')
+# datas
+
+    desenhar.text((750,1770),data_inicio,fill='blue',font=font_data)
+    desenhar.text((750,1930),data_final,fill='blue',font=font_data)
+
+    desenhar.text((2220,1930),data_emissao,fill='blue',font=font_data)
+
+
+
+
+    imagem.save(f'./certificados completos/{indice} {nome_participante} certificado.png')
 
 
 
